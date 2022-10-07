@@ -7,9 +7,10 @@ void Paddle::Initialize()
 {
 	SetColour(sf::Color::Yellow);
 
-	auto center = mRectangleShape.getLocalBounds();
+ 	auto center = mRectangleShape.getGlobalBounds();
 	mRectangleShape.setOrigin(center.width / 2.f, center.height / 2.f);
-}
+	center = mRectangleShape.getGlobalBounds();
+ }
 
 void Paddle::Update()
 {
@@ -40,4 +41,9 @@ void Paddle::SetColour(sf::Color colour)
 const sf::RectangleShape Paddle::GetDrawable()
 {
 	return mRectangleShape;
+}
+
+const JMath::Vector2 Paddle::GetPosition() const
+{
+	return { mRectangleShape.getPosition().x, mRectangleShape.getPosition().y };
 }

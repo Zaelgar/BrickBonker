@@ -39,4 +39,9 @@ private:
 	Paddle mPaddle{};
 	Ball mBall{};
 	std::vector<Brick> mBricks{};
+
+	bool isNoClip = false;
+	sf::Time secondsToTime;
+	sf::Time currentElapsed;
+	sf::Clock noClipTimer;
 };
