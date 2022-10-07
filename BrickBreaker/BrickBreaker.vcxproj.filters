@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\JMath">
+      <UniqueIdentifier>{9747f11d-5dc0-4edb-8256-e2504b4ff543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\JMath">
+      <UniqueIdentifier>{83188886-a9a7-4849-8ff4-71fa5d638a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States">
+      <UniqueIdentifier>{a8f14c8b-2286-4592-8aee-8d9219f6e343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{944bed3b-68ab-439e-a959-af720e7e374b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Helpers">
+      <UniqueIdentifier>{4a645e16-65a9-441e-a260-94a66c276af9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helpers">
+      <UniqueIdentifier>{9ce439ae-3821-420b-9536-3c80b5143de8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JMath\Src\JMath.cpp">
+      <Filter>Source Files\JMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Paddle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameButton.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSprite.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Brick.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Common.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Constants.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\JMath.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Matrix3.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Matrix4.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Primitive2D.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Quaternion.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Random.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Vector2.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Vector3.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="JMath\Inc\Vector4.h">
+      <Filter>Header Files\JMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Paddle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConstants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuState.hpp">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.hpp">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.hpp">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSprite.hpp">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameButton.hpp">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
