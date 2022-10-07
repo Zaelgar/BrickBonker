@@ -5,7 +5,7 @@
 namespace GameConstants
 {
 	const float PaddleWidth = 120.0f;
-	const float PaddleHeight = 20.0f;
+	const float PaddleHeight = 10.0f;
 
 	const float BallSize = 10.f;
 
