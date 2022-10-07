@@ -91,22 +91,35 @@ CollisionType Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect)
 	if (circlePosition.x < globalBoundsRect.left)
 	{
 		testX = globalBoundsRect.left;
-		result = CollisionType::Left;
 	}
 	else if (circlePosition.x > globalBoundsRect.left + globalBoundsRect.width)
 	{
 		testX = globalBoundsRect.left + globalBoundsRect.width;
-		result = CollisionType::Right;
 	}
 	if (circlePosition.y < globalBoundsRect.top)
 	{
 		testY = globalBoundsRect.top;
-		result = CollisionType::Top;
 	}
 	else if (circlePosition.y > globalBoundsRect.top + globalBoundsRect.height)
 	{
 		testY = globalBoundsRect.top + globalBoundsRect.height;
-		result = CollisionType::Bottom;
+	}
+
+	if (testX < globalBoundsRect.left + globalBoundsRect.width
+		&& testX > globalBoundsRect.left)
+	{
+		if (testY > globalBoundsRect.top + globalBoundsRect.height / 2.f)
+			result = CollisionType::Bottom;
+		else
+			result = CollisionType::Top;
+	}
+	if (testY < globalBoundsRect.top + globalBoundsRect.height
+		&& testY > globalBoundsRect.top)
+	{
+		if (testX > globalBoundsRect.left + globalBoundsRect.width / 2.f)
+			result = CollisionType::Right;
+		else
+			result = CollisionType::Left;
 	}
 
 	float distanceX = circlePosition.x - testX;
@@ -115,7 +128,6 @@ CollisionType Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect)
 
 	if (distance <= mCircleShape.getRadius())
 	{
-		//mCircleShape.move(-mVelocity.x, -mVelocity.y);
 		return result;
 	}
 	return CollisionType::None;

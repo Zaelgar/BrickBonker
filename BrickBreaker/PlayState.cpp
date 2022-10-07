@@ -48,16 +48,6 @@ void PlayState::Terminate()
 
 void PlayState::Update(float deltaTime)
 {
-	// Paddle side collision behaviour
-	if (isNoClip)
-	{
-		currentElapsed += noClipTimer.getElapsedTime();
-		if (currentElapsed >= secondsToTime)
-		{
-			isNoClip = false;
-		}
-	}
-
 	auto game = Game::Get();
 
 	CheckCollisions();
@@ -86,16 +76,10 @@ void PlayState::CheckCollisions()
 {
 	CollisionType collisionType = mBall.CheckRectCollision(mPaddle.GetDrawable().getGlobalBounds());
 
-	if (collisionType == CollisionType::Top && isNoClip == false)
+	if (collisionType != CollisionType::None/*(collisionType == CollisionType::Top || collisionType == CollisionType::Bottom)*/ && isNoClip == false)
 	{
 		JMath::Vector2 paddleToBall = mBall.GetPosition() - mPaddle.GetPosition();
 		mBall.SetVelocity(paddleToBall);
-	}
-	else if(collisionType != CollisionType::None)
-	{
-		isNoClip = true;
-		noClipTimer.restart();
-		currentElapsed = sf::seconds(0.f);
 	}
 
 	for (auto& brick : mBricks)
