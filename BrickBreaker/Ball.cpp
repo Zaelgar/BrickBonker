@@ -75,6 +75,6 @@ bool Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect, const sf::V
 	// if point intersects with rect, we collide. Good enough approximation?
 	//TODO1 Better found here: https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/
 
-	//sf::Vector2f closestPointOnBallToRect = 
+	sf::Vector2f closestPointOnBallToRect = { 9.f, 0.f };
 	return false;
 }
