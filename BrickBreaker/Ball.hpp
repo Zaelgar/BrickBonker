@@ -36,7 +36,7 @@ private:
 
 	sf::CircleShape mCircleShape{ GameConstants::BallSize };
 
-	float mSpeed = 10.0f; // per frame
+	float mSpeed = 15.0f; // per frame
 	JMath::Vector2 mVelocity{ JMath::Vector2::RandomOnUnitCircle() * mSpeed };
 
 	bool mIsStuckToPaddle{ true };
