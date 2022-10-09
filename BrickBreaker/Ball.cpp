@@ -19,12 +19,17 @@ void Ball::Update()
 	CheckWallCollision();
 }
 
+const JMath::Vector2 Ball::GetPosition() const
+{
+	return { mCircleShape.getPosition().x, mCircleShape.getPosition().y };
+}
+
 void Ball::SetBallColour(sf::Color colour)
 {
 	mCircleShape.setFillColor(colour);
 }
 
-void Ball::SetVelocity(sf::Vector2f velocity)
+void Ball::SetVelocity(JMath::Vector2 velocity)
 {
 	mVelocity.x = velocity.x;
 	mVelocity.y = velocity.y;
@@ -69,12 +74,61 @@ void Ball::CheckWallCollision()
 	}
 }
 
-bool Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect, const sf::Vector2f& rectPosition) const
+CollisionType Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect)
 {
 	// Get point from center of ball to point on edge closest to rect.
 	// if point intersects with rect, we collide. Good enough approximation?
-	//TODO1 Better found here: https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/
+	// TODO1 Better found here: https://www.jeffreythompson.org/collision-detection/circle-rect.php
+	// This does not work if the ball is moving fast enough to go through the rect.
 
-	//sf::Vector2f closestPointOnBallToRect = 
-	return false;
+	const auto circlePosition = mCircleShape.getPosition();
+
+	CollisionType result = CollisionType::None;
+
+	float testX = circlePosition.x;
+	float testY = circlePosition.y;
+
+	if (circlePosition.x < globalBoundsRect.left)
+	{
+		testX = globalBoundsRect.left;
+	}
+	else if (circlePosition.x > globalBoundsRect.left + globalBoundsRect.width)
+	{
+		testX = globalBoundsRect.left + globalBoundsRect.width;
+	}
+	if (circlePosition.y < globalBoundsRect.top)
+	{
+		testY = globalBoundsRect.top;
+	}
+	else if (circlePosition.y > globalBoundsRect.top + globalBoundsRect.height)
+	{
+		testY = globalBoundsRect.top + globalBoundsRect.height;
+	}
+
+	if (testX < globalBoundsRect.left + globalBoundsRect.width
+		&& testX > globalBoundsRect.left)
+	{
+		if (testY > globalBoundsRect.top + globalBoundsRect.height / 2.f)
+			result = CollisionType::Bottom;
+		else
+			result = CollisionType::Top;
+	}
+	if (testY < globalBoundsRect.top + globalBoundsRect.height
+		&& testY > globalBoundsRect.top)
+	{
+		if (testX > globalBoundsRect.left + globalBoundsRect.width / 2.f)
+			result = CollisionType::Right;
+		else
+			result = CollisionType::Left;
+	}
+
+	float distanceX = circlePosition.x - testX;
+	float distanceY = circlePosition.y - testY;
+	float distance = sqrt((distanceX * distanceX) + (distanceY * distanceY));
+
+	if (distance <= mCircleShape.getRadius())
+	{
+		return result;
+	}
+	return CollisionType::None;
 }

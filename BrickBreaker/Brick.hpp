@@ -17,6 +17,7 @@ public:
 
 	void SetColour(sf::Color colour);
 	void SetPosition(float x, float y);
+	void SetActive(bool isActive) { mIsActive = isActive; }
 
 	bool IsActive() { return mIsActive; }
 private:

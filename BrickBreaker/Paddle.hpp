@@ -3,6 +3,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <JMath.h>
 
 #include "GameConstants.hpp"
 
@@ -15,6 +16,7 @@ public:
 	void SetColour(sf::Color colour);
 
 	const sf::RectangleShape GetDrawable();
+	const JMath::Vector2 GetPosition() const;
 
 private:
 	float yPosition = 650.f;

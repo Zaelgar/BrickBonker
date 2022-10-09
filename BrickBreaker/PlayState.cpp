@@ -35,6 +35,9 @@ void PlayState::Initialize()
 			mBricks[i].SetPosition(edgeOffset + ((brickWidth + offset) * x), edgeOffset + ((brickHeight + offset)*y) );
 		}
 	}
+
+	// When a ball hits the paddle on the right, left, or bottom, we turn on no clip for this many seconds.
+	secondsToTime = sf::seconds(2.0f);
 }
 
 void PlayState::Terminate()
@@ -46,6 +49,9 @@ void PlayState::Terminate()
 void PlayState::Update(float deltaTime)
 {
 	auto game = Game::Get();
+
+	CheckCollisions();
+
 	mPaddle.Update();
 	mBall.Update();
 }
@@ -68,5 +74,34 @@ void PlayState::Render()
 
 void PlayState::CheckCollisions()
 {
+	CollisionType collisionType = mBall.CheckRectCollision(mPaddle.GetDrawable().getGlobalBounds());
 
+	if (collisionType != CollisionType::None/*(collisionType == CollisionType::Top || collisionType == CollisionType::Bottom)*/ && isNoClip == false)
+	{
+		JMath::Vector2 paddleToBall = mBall.GetPosition() - mPaddle.GetPosition();
+		mBall.SetVelocity(paddleToBall);
+	}
+
+	for (auto& brick : mBricks)
+	{
+		if (brick.IsActive())
+		{
+			collisionType = mBall.CheckRectCollision(brick.GetDrawable().getGlobalBounds());
+
+			if (collisionType == CollisionType::Left || collisionType == CollisionType::Right)
+			{
+				auto vel = mBall.GetVelocity();
+				vel.x *= -1.f;
+				mBall.SetVelocity(vel);
+				brick.SetActive(false);
+			}
+			else if (collisionType == CollisionType::Top || collisionType == CollisionType::Bottom)
+			{
+				auto vel = mBall.GetVelocity();
+				vel.y *= -1.f;
+				mBall.SetVelocity(vel);
+				brick.SetActive(false);
+			}
+		}
+	}
 }
