@@ -52,7 +52,15 @@ Game* Game::Get()
 void Game::ChangeState(std::string name)
 {
 	if (auto iter = mGameStates.find(name); iter != mGameStates.end())
+	{
 		mNextState = iter->second.get();
+		mIsEscapeHitThisFrame = false;
+	}
+	else
+	{
+		LOG("There was no state called: " + name + ". Exiting game.");
+		Quit();
+	}
 }
 
 void Game::Run()
@@ -65,12 +73,18 @@ void Game::Run()
 
 	while (mRenderWindow->isOpen())
 	{
+		mIsEscapeHitThisFrame = false;
 		sf::Event event;
 		while (mRenderWindow->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
 				Quit();
+			}
+			// We only want to let 1 full press of the escape key through. Holding it down doesn't count.
+			else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Key::Escape)
+			{
+				mIsEscapeHitThisFrame = true;
 			}
 		}
 
@@ -96,4 +110,14 @@ void Game::Quit()
 {
 	mCurrentState->Terminate();
 	mRenderWindow->close();
+}
+
+bool Game::IsEscapeHitThisFrame(bool isConsumed)
+{
+	if (mIsEscapeHitThisFrame && isConsumed)
+	{
+		mIsEscapeHitThisFrame = false;
+		return true;
+	}
+	return mIsEscapeHitThisFrame;
 }

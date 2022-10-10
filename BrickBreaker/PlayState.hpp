@@ -17,6 +17,7 @@
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Paddle.hpp"
+#include "GameButton.hpp"
 
 class PlayState : public GameState
 {
@@ -24,7 +25,7 @@ public:
 	PlayState() = default;
 
 	void Initialize() override;
-	void Terminate() override; 
+	void Terminate() override;
 	// deltaTime is measures in seconds.
 	void Update(float deltaTime) override;
 	void Render() override;
@@ -40,8 +41,10 @@ private:
 	Ball mBall{};
 	std::vector<Brick> mBricks{};
 
-	bool isNoClip = false;
-	sf::Time secondsToTime;
-	sf::Time currentElapsed;
-	sf::Clock noClipTimer;
+	GameButton mPlayButton{};
+	GameButton mQuitButton{};
+	sf::RectangleShape mPauseUnderlay{};
+	sf::Color mPauseColour{ 255u, 255u, 255u, 128u };
+
+	bool mIsPaused = false;
 };

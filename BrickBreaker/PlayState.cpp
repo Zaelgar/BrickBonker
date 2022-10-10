@@ -6,6 +6,7 @@
 
 void PlayState::Initialize()
 {
+	// Initialize music
 	LOG("Initializing PlayState.");
 
 	ASSERT(levelSong.openFromFile("resources\\level1song.wav"));
@@ -13,6 +14,7 @@ void PlayState::Initialize()
 	levelSong.setLoop(true);
 	levelSong.play();
 
+	// Initialize Game Objects
 	mPaddle.Initialize();
 	mBall.Initialize();
 
@@ -36,8 +38,18 @@ void PlayState::Initialize()
 		}
 	}
 
-	// When a ball hits the paddle on the right, left, or bottom, we turn on no clip for this many seconds.
-	secondsToTime = sf::seconds(2.0f);
+	// Initialize Pause Screen
+	mPlayButton.LoadTexture("resources\\play.png");
+	mPlayButton.SetPosition({ 550.0f, 250.0f });
+	mPlayButton.SetColour(sf::Color::Green);
+
+	mQuitButton.LoadTexture("resources\\quit.png");
+	mQuitButton.SetPosition({ 565.0f, 450.0f });
+	mQuitButton.SetColour(sf::Color::Red);
+
+	mPauseUnderlay.setSize({ static_cast<float>(Game::Get()->GetGameConfig().mWindowWidth)
+		, static_cast<float>(Game::Get()->GetGameConfig().mWindowHeight) });
+	mPauseUnderlay.setFillColor(mPauseColour);
 }
 
 void PlayState::Terminate()
@@ -50,10 +62,31 @@ void PlayState::Update(float deltaTime)
 {
 	auto game = Game::Get();
 
-	CheckCollisions();
+	if (Game::Get()->IsEscapeHitThisFrame(true))
+	{
+		mIsPaused = mIsPaused ? false : true;
+	}
 
-	mPaddle.Update();
-	mBall.Update();
+	if (!mIsPaused)
+	{
+		CheckCollisions();
+
+		mPaddle.Update();
+		mBall.Update();
+	}
+	else
+	{
+		auto mousePosition = sf::Mouse::getPosition(*game->GetRenderWindow());
+		if (mPlayButton.Update(mousePosition))
+		{
+			mIsPaused = false;
+		}
+		else if (mQuitButton.Update(mousePosition))
+		{
+			mIsPaused = false;
+			game->ChangeState("MenuState");
+		}
+	}
 }
 
 void PlayState::Render()
@@ -70,13 +103,20 @@ void PlayState::Render()
 
 	renderWindow->draw(mPaddle.GetDrawable());
 	renderWindow->draw(mBall.GetDrawable());
+
+	if (mIsPaused)
+	{
+		renderWindow->draw(mPauseUnderlay);
+		renderWindow->draw(mPlayButton.GetDrawable());
+		renderWindow->draw(mQuitButton.GetDrawable());
+	}
 }
 
 void PlayState::CheckCollisions()
 {
 	CollisionType collisionType = mBall.CheckRectCollision(mPaddle.GetDrawable().getGlobalBounds());
 
-	if (collisionType != CollisionType::None/*(collisionType == CollisionType::Top || collisionType == CollisionType::Bottom)*/ && isNoClip == false)
+	if (collisionType != CollisionType::None)
 	{
 		JMath::Vector2 paddleToBall = mBall.GetPosition() - mPaddle.GetPosition();
 		mBall.SetVelocity(paddleToBall);
