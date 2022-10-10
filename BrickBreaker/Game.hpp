@@ -60,6 +60,7 @@ public:
 
 	sf::RenderWindow* GetRenderWindow() { return mRenderWindow.get(); }
 	const GameConfig& GetGameConfig() const { return mGameConfig; }
+	bool IsEscapeHitThisFrame(bool isConsumed = false);
 
 private:
 	std::map<std::string, std::unique_ptr<GameState>> mGameStates;
@@ -74,6 +75,8 @@ private:
 	// Game State Machine
 	GameState* mCurrentState{ nullptr };
 	GameState* mNextState{ nullptr };
+
+	bool mIsEscapeHitThisFrame = false;
 };
 
 template <class StateType>
