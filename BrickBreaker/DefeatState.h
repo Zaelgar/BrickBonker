@@ -8,6 +8,7 @@
 #include "GameSprite.hpp"
 #include "GameButton.hpp"
 
+// TODO2: There's gotta be a better way than having 2 end condition states.
 class DefeatState : public GameState
 {
 public:

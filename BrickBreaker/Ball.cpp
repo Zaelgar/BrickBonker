@@ -6,13 +6,17 @@
 void Ball::Initialize()
 {
 	// TODO1: Have a real start position on the paddle. Click to release maybe?
-	mCircleShape.setPosition({ 300.0f, 300.0f });
+	mCircleShape.setPosition({ 360.f, 600.0f });
 
 	auto center = mCircleShape.getLocalBounds();
 	mCircleShape.setOrigin(center.width / 2.f, center.height / 2.f);
 
 	// TODO2: Better math solution for this game...
 	auto vel = JMath::Vector2::RandomOnUnitCircle() * mSpeed;
+
+	// Always launches upwards
+	if (vel.y >= 0)
+		vel.y *= -1.f;
 
 	mVelocity = { vel.x, vel.y };
 }

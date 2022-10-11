@@ -3,29 +3,25 @@
 #include "Brick.hpp"
 #include "Game.hpp"
 
-void Brick::Initialize()
+void Alien::Initialize()
+{
+	mSprite.LoadTexture("resources\\alien.png");
+}
+
+void Alien::Update()
 {
 }
 
-void Brick::Update()
+void Alien::Render()
+{
+	mSprite.Render();
+}
+
+void Alien::Shutdown()
 {
 }
 
-void Brick::Render()
+void Alien::SetPosition(float x, float y)
 {
-	Game::Get()->GetRenderWindow()->draw(mRectangleShape);
-}
-
-void Brick::Shutdown()
-{
-}
-
-void Brick::SetColour(sf::Color colour)
-{
-	mRectangleShape.setFillColor(colour);
-}
-
-void Brick::SetPosition(float x, float y)
-{
-	mRectangleShape.setPosition(x, y);
+	mSprite.GetSprite().setPosition(x, y);
 }
