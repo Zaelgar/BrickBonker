@@ -39,11 +39,11 @@ void MenuState::Update(float deltaTime)
 
 	auto mousePosition = sf::Mouse::getPosition(*game->GetRenderWindow());
 
-	if (mPlayButton.Update(mousePosition))
+	if (mPlayButton.Update())
 	{
 		game->ChangeState("PlayState");
 	}
-	else if (mQuitButton.Update(mousePosition))
+	else if (mQuitButton.Update())
 	{
 		game->Quit();
 	}
@@ -53,7 +53,7 @@ void MenuState::Render()
 {
 	auto renderWindow = Game::Get()->GetRenderWindow();
 
-	renderWindow->draw(mLogo.GetDrawable());
-	renderWindow->draw(mPlayButton.GetDrawable());
-	renderWindow->draw(mQuitButton.GetDrawable());
+	mLogo.Render();
+	mPlayButton.Render();
+	mQuitButton.Render();
 }

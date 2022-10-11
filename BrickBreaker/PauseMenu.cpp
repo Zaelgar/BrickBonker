@@ -23,16 +23,13 @@ void PauseMenu::Initialize()
 
 bool PauseMenu::Update()
 {
-	auto game = Game::Get();
-
-	auto mousePosition = sf::Mouse::getPosition(*game->GetRenderWindow());
-	if (mPlayButton.Update(mousePosition))
+	if (mPlayButton.Update())
 	{
 		return true;
 	}
-	else if (mQuitButton.Update(mousePosition))
+	else if (mQuitButton.Update())
 	{
-		game->ChangeState("MenuState");
+		Game::Get()->ChangeState("MenuState");
 	}
 
 	return false;
@@ -44,8 +41,7 @@ void PauseMenu::Render()
 
 	renderWindow->draw(mPauseUnderlay);
 
-	renderWindow->draw(mPauseSprite.GetDrawable());
-
-	renderWindow->draw(mPlayButton.GetDrawable());
-	renderWindow->draw(mQuitButton.GetDrawable());
+	mPauseSprite.Render();
+	mPlayButton.Render();
+	mQuitButton.Render();
 }

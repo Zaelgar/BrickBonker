@@ -33,17 +33,12 @@ void Paddle::Update()
 	mRectangleShape.setPosition(mousePosition.x, yPosition);
 }
 
+void Paddle::Render()
+{
+	Game::Get()->GetRenderWindow()->draw(mRectangleShape);
+}
+
 void Paddle::SetColour(sf::Color colour)
 {
 	mRectangleShape.setFillColor(colour);
-}
-
-const sf::RectangleShape Paddle::GetDrawable()
-{
-	return mRectangleShape;
-}
-
-const JMath::Vector2 Paddle::GetPosition() const
-{
-	return { mRectangleShape.getPosition().x, mRectangleShape.getPosition().y };
 }

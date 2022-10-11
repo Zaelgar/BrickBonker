@@ -1,6 +1,7 @@
 // Written by Jaidon van Herwaarden October 2022
 
 #include "Brick.hpp"
+#include "Game.hpp"
 
 void Brick::Initialize()
 {
@@ -10,13 +11,13 @@ void Brick::Update()
 {
 }
 
-void Brick::Shutdown()
+void Brick::Render()
 {
+	Game::Get()->GetRenderWindow()->draw(mRectangleShape);
 }
 
-const sf::RectangleShape Brick::GetDrawable() const
+void Brick::Shutdown()
 {
-	return mRectangleShape;
 }
 
 void Brick::SetColour(sf::Color colour)

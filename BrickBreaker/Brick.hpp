@@ -9,9 +9,11 @@ class Brick
 public:
 	void Initialize();
 	void Update();
+	void Render();
 	void Shutdown();
 
-	const sf::RectangleShape GetDrawable() const;
+	const sf::RectangleShape GetRectangleShape() const { return mRectangleShape; }
+	const sf::FloatRect GetGlobalBounds() const { return mRectangleShape.getGlobalBounds(); }
 
 	void SetColour(sf::Color colour);
 	void SetPosition(float x, float y);

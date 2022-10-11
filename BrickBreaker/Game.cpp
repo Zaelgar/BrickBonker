@@ -7,6 +7,7 @@
 #include "GameState.hpp"
 #include "PlayState.hpp"
 #include "MenuState.hpp"
+#include "DefeatState.h"
 
 namespace
 {
@@ -32,6 +33,9 @@ Game::Game(GameConfig gameConfig)
 
 	AddState<MenuState>("MenuState");
 	AddState<PlayState>("PlayState");
+	AddState<DefeatState>("DefeatState");
+
+	mCurrentState = mGameStates["MenuState"].get();
 }
 
 Game::~Game()
@@ -64,7 +68,10 @@ void Game::ChangeState(std::string name)
 
 void Game::Run()
 {
-	mCurrentState = mGameStates.begin()->second.get();
+	if (!mCurrentState)
+	{
+		mCurrentState = mGameStates.begin()->second.get();
+	}
 	mCurrentState->Initialize();
 
 	sf::Time deltaTime;

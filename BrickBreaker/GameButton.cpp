@@ -10,9 +10,10 @@ GameButton::GameButton(std::string filePath, sf::Vector2<float> position)
 }
 
 // Update will return true if the button has been clicked.
-bool GameButton::Update(sf::Vector2<int> mousePosition)
+bool GameButton::Update()
 {
-	// TODO2: don't pass in mouse position. Grab directly from Game
+	const auto mousePosition = sf::Mouse::getPosition(*Game::Get()->GetRenderWindow());
+
 	if (IsMouseOverButton(mousePosition))
 	{
 		mSprite.setColor(mHoverColourMultiplier);
@@ -26,6 +27,11 @@ bool GameButton::Update(sf::Vector2<int> mousePosition)
 	mSprite.setColor(sf::Color::White);
 
 	return false;
+}
+
+void GameButton::Render()
+{
+	Game::Get()->GetRenderWindow()->draw(mSprite);
 }
 
 void GameButton::SetPosition(sf::Vector2<float> position)
