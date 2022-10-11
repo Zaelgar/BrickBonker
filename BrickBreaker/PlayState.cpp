@@ -65,6 +65,8 @@ void PlayState::Initialize()
 	// Initialize Pause Screen
 	mPauseMenu.Initialize();
 	mIsPaused = false;
+
+	Game::Get()->GetRenderWindow()->setMouseCursorVisible(false);
 }
 
 void PlayState::Terminate()
@@ -75,6 +77,7 @@ void PlayState::Terminate()
 
 void PlayState::Update(float deltaTime)
 {
+	Game::Get()->GetRenderWindow()->setMouseCursorVisible(mIsPaused);
 	auto game = Game::Get();
 
 	UpdateStars();
@@ -216,7 +219,7 @@ void PlayState::UpdateStars()
 	{
 		s.move(0.f, -mStarSpeed);
 		auto position = s.getPosition();
-		if (s.getPosition().y < 0)
+		if (s.getPosition().y < -mStarSize.y)
 		{
 			s.setPosition(s.getPosition().x, Game::Get()->GetGameConfig().mWindowHeight + mStarSize.y);
 		}

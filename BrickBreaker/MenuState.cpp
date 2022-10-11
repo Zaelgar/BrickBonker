@@ -18,6 +18,10 @@ void MenuState::Initialize()
 	mLogo.LoadTexture("resources\\logo.png");
 	mLogo.SetPosition(100.0f, true);
 
+	mEarth.LoadTexture("resources\\earth.png");
+	mEarth.SetPosition(275.f, true);
+	mEarth.GetSprite().setColor({ 150u, 150u, 150u });
+
 	mPlayButton.LoadTexture("resources\\play.png");
 	mPlayButton.SetPosition(350.0f, true);
 	mPlayButton.SetColour(sf::Color::Green);
@@ -25,6 +29,8 @@ void MenuState::Initialize()
 	mQuitButton.LoadTexture("resources\\quit.png");
 	mQuitButton.SetPosition(550.0f, true);
 	mQuitButton.SetColour(sf::Color::Red);
+
+	Game::Get()->GetRenderWindow()->setMouseCursorVisible(true);
 }
 
 void MenuState::Terminate()
@@ -35,25 +41,22 @@ void MenuState::Terminate()
 
 void MenuState::Update(float deltaTime)
 {
-	auto game = Game::Get();
-
-	auto mousePosition = sf::Mouse::getPosition(*game->GetRenderWindow());
-
 	if (mPlayButton.Update())
 	{
+		auto game = Game::Get();
 		game->ChangeState("PlayState");
 	}
 	else if (mQuitButton.Update())
 	{
+		auto game = Game::Get();
 		game->Quit();
 	}
 }
 
 void MenuState::Render()
 {
-	auto renderWindow = Game::Get()->GetRenderWindow();
-
 	mLogo.Render();
+	mEarth.Render();
 	mPlayButton.Render();
 	mQuitButton.Render();
 }
