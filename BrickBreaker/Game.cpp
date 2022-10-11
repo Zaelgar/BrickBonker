@@ -23,7 +23,6 @@ Game::Game(GameConfig gameConfig)
 	}
 
 	LOG("Initializing SFML RenderWindow.");
-	// TODO2: why doesn't this like the initializer list when a member instead of a ptr?
 	mRenderWindow = std::make_unique<sf::RenderWindow>(
 		sf::VideoMode(mGameConfig.mWindowWidth, mGameConfig.mWindowHeight)
 		, mGameConfig.gameName

@@ -11,4 +11,6 @@ namespace GameConstants
 
 	const float BrickWidth = 100.0f;
 	const float BrickHeight = 30.0f;
+
+	const float WallThickness = 40.f;
 };

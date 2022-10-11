@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameCommon.hpp"
 #include "GameSprite.hpp"
 
 class GameButton
@@ -14,6 +15,7 @@ public:
 	void SetColour(sf::Color colour) { mHoverColourMultiplier = colour; }
 
 	void SetPosition(sf::Vector2<float> position);
+	void SetPosition(float yOrBoth, bool isXCentered = true);
 
 	const sf::Sprite& GetDrawable() { return mSprite; }
 

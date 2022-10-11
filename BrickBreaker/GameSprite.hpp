@@ -2,11 +2,7 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include <string>
-
-#include "Debug.h"
+#include "GameCommon.hpp"
 
 class GameSprite
 {
@@ -16,6 +12,9 @@ public:
 
 	void LoadTexture(std::string filePath);
 	void SetPosition(float x, float y);
+
+	// Is this weird? I don't know. I like it though
+	void SetPosition(float yOrBoth, bool isXCentered = false);
 
 	const sf::Sprite& GetDrawable() { return mSprite; }
 

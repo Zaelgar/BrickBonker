@@ -2,10 +2,7 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include "GameConstants.hpp"
-#include <JMath.h>
+#include "GameCommon.hpp"
 
 enum class CollisionType
 {
@@ -29,10 +26,13 @@ public:
 	void SetBallColour(sf::Color colour);
 	void SetVelocity(JMath::Vector2 velocity);
 
+	void NegateXVelocity();
+	void NegateYVelocity();
+
 	CollisionType CheckRectCollision(const sf::FloatRect& globalBoundsRect);
+	bool CheckDeathCollision();
 
 private:
-	void CheckWallCollision();
 
 	sf::CircleShape mCircleShape{ GameConstants::BallSize };
 

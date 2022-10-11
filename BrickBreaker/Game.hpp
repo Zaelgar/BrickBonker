@@ -2,14 +2,13 @@
 
 #pragma once
 
+#include "GameCommon.hpp"
+
 #include <map>
 #include <memory>
 #include <string>
 
-#include <SFML/Graphics.hpp>
-#include "Debug.h"
 #include "GameState.hpp"
-#include "GameConstants.hpp"
 
 struct GameConfig
 {

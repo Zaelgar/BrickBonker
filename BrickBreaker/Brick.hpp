@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include "GameConstants.hpp"
+#include "GameCommon.hpp"
 
 class Brick
 {
