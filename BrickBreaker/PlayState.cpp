@@ -27,7 +27,7 @@ void PlayState::Initialize()
 
 	mTopWall.setFillColor(sf::Color::Blue);
 	mTopWall.setSize({ static_cast<float>(gameConfig.mWindowWidth), static_cast<float>(GameConstants::WallThickness) });
-	mTopWall.setPosition({0.f, -(GameConstants::WallThickness / 2.f)});
+	mTopWall.setPosition({ 0.f, -(GameConstants::WallThickness / 2.f) });
 
 	mRightWall.setFillColor(sf::Color::Blue);
 	mRightWall.setSize({ static_cast<float>(GameConstants::WallThickness), static_cast<float>(gameConfig.mWindowHeight) });
@@ -35,7 +35,7 @@ void PlayState::Initialize()
 
 
 	// Initialize brick layout
-	// TODO1: Convert this to read in a CSV or JSON as a level? Makes Playstate more versatile
+	// TODO2: Convert this to read in a CSV or JSON as a level? Makes Playstate more versatile
 	int levelHeight = 5;
 	int levelWidth = 10;
 	mBricks.resize(levelHeight * levelWidth);
@@ -72,7 +72,7 @@ void PlayState::Update(float deltaTime)
 
 	if (mBall.CheckDeathCollision())
 	{
-		mIsPaused = true;
+		game->ChangeState("DefeatState");
 	}
 
 	if (Game::Get()->IsEscapeHitThisFrame(true))
@@ -87,7 +87,7 @@ void PlayState::Update(float deltaTime)
 		mPaddle.Update();
 		mBall.Update();
 	}
-	else if(mPauseMenu.Update()) // Will return true if resume is pressed
+	else if (mPauseMenu.Update()) // Will return true if resume is pressed
 	{
 		mIsPaused = false;
 	}
@@ -107,15 +107,13 @@ void PlayState::Render()
 	{
 		if (brick.IsActive())
 		{
-			// TODO1: Remove this pattern. Let objects know how to render themselves.
-			// GameObject->Render() vs renderWindow.draw(GameObject->GetDrawable());
-			renderWindow->draw(brick.GetDrawable());
+			brick.Render();
 		}
 	}
 
 	// Draw other game objects
-	renderWindow->draw(mPaddle.GetDrawable());
-	renderWindow->draw(mBall.GetDrawable());
+	mPaddle.Render();
+	mBall.Render();
 
 	// Only if paused, draw pause screen
 	if (mIsPaused)
@@ -126,11 +124,11 @@ void PlayState::Render()
 
 void PlayState::CheckCollisions()
 {
-	CollisionType collisionType = mBall.CheckRectCollision(mPaddle.GetDrawable().getGlobalBounds());
+	CollisionType collisionType = mBall.CheckRectCollision(mPaddle.GetGlobalBounds());
 
 	if (collisionType != CollisionType::None)
 	{
-		JMath::Vector2 paddleToBall = mBall.GetPosition() - mPaddle.GetPosition();
+		auto paddleToBall = mBall.GetPosition() - mPaddle.GetPosition();
 		mBall.SetVelocity(paddleToBall);
 	}
 
@@ -138,7 +136,7 @@ void PlayState::CheckCollisions()
 	{
 		if (brick.IsActive())
 		{
-			collisionType = mBall.CheckRectCollision(brick.GetDrawable().getGlobalBounds());
+			collisionType = mBall.CheckRectCollision(brick.GetGlobalBounds());
 
 			if (collisionType == CollisionType::Left || collisionType == CollisionType::Right)
 			{

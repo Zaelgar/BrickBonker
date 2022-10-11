@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DefeatState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Brick.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Paddle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DefeatState.h" />
     <ClInclude Include="GameCommon.hpp" />
     <ClInclude Include="Debug.hpp" />
     <ClInclude Include="Game.hpp" />

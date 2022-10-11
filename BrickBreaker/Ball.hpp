@@ -18,13 +18,14 @@ class Ball
 public:
 	void Initialize();
 	void Update();
+	void Render();
 
-	const sf::CircleShape GetDrawable() const { return mCircleShape; }
-	const JMath::Vector2 GetVelocity() const { return mVelocity; }
-	const JMath::Vector2 GetPosition() const;
+	const sf::CircleShape GetCircleShape() const { return mCircleShape; }
+	const sf::Vector2f GetVelocity() const { return mVelocity; }
+	const sf::Vector2f GetPosition() const { return mCircleShape.getPosition(); }
 
 	void SetBallColour(sf::Color colour);
-	void SetVelocity(JMath::Vector2 velocity);
+	void SetVelocity(sf::Vector2f velocity);
 
 	void NegateXVelocity();
 	void NegateYVelocity();
@@ -36,8 +37,8 @@ private:
 
 	sf::CircleShape mCircleShape{ GameConstants::BallSize };
 
-	float mSpeed = 15.0f; // per frame
-	JMath::Vector2 mVelocity{ JMath::Vector2::RandomOnUnitCircle() * mSpeed };
+	float mSpeed = 15.0f; // per frame (60 FPS)
+	sf::Vector2f mVelocity{};
 
 	bool mIsStuckToPaddle{ true };
 };

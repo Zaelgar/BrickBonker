@@ -16,10 +16,6 @@ public:
 
 private:
 
-	bool IsMouseOverButton(sf::Vector2<int> mousePosition);
-	bool IsButtonPressed();
-
-
 	GameSprite mPauseSprite{};
 	GameButton mPlayButton{};
 	GameButton mQuitButton{};

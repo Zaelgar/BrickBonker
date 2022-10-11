@@ -10,6 +10,11 @@ void Ball::Initialize()
 
 	auto center = mCircleShape.getLocalBounds();
 	mCircleShape.setOrigin(center.width / 2.f, center.height / 2.f);
+
+	// TODO2: Better math solution for this game...
+	auto vel = JMath::Vector2::RandomOnUnitCircle() * mSpeed;
+
+	mVelocity = { vel.x, vel.y };
 }
 
 void Ball::Update()
@@ -19,9 +24,9 @@ void Ball::Update()
 	mCircleShape.move(mVelocity.x, mVelocity.y);
 }
 
-const JMath::Vector2 Ball::GetPosition() const
+void Ball::Render()
 {
-	return { mCircleShape.getPosition().x, mCircleShape.getPosition().y };
+	Game::Get()->GetRenderWindow()->draw(mCircleShape);
 }
 
 void Ball::SetBallColour(sf::Color colour)
@@ -29,12 +34,17 @@ void Ball::SetBallColour(sf::Color colour)
 	mCircleShape.setFillColor(colour);
 }
 
-void Ball::SetVelocity(JMath::Vector2 velocity)
+void Ball::SetVelocity(sf::Vector2f velocity)
 {
-	mVelocity.x = velocity.x;
-	mVelocity.y = velocity.y;
-	mVelocity.Normalize();
-	mVelocity *= mSpeed;
+	// TODO2: Better math solution for this game...
+	// Normalize and multiply by max Speed.
+	float magnitude = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+	velocity.x /= magnitude;
+	velocity.y /= magnitude;
+	velocity.x *= mSpeed;
+	velocity.y *= mSpeed;
+
+	mVelocity = velocity;
 }
 
 bool Ball::CheckDeathCollision()

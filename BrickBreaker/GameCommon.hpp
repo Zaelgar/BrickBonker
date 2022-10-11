@@ -11,6 +11,7 @@
 
 // Game
 #include "GameConstants.hpp"
+// TODO2: Remove this header and replace with SFML-y vector math
 #include <JMath.h>
 #include "Debug.hpp"
 

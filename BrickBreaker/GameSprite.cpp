@@ -8,6 +8,11 @@ GameSprite::GameSprite(std::string filePath)
 	LoadTexture(filePath);
 }
 
+void GameSprite::Render()
+{
+	Game::Get()->GetRenderWindow()->draw(mSprite);
+}
+
 void GameSprite::LoadTexture(std::string filePath)
 {
 	ASSERT(mTexture.loadFromFile(filePath), std::exception{ "File not found." });

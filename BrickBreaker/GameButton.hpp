@@ -9,7 +9,8 @@ public:
 	GameButton() = default;
 	GameButton(std::string filePath, sf::Vector2<float> position);
 
-	bool Update(sf::Vector2<int> mousePosition);
+	bool Update();
+	void Render();
 
 	void LoadTexture(std::string filePath);
 	void SetColour(sf::Color colour) { mHoverColourMultiplier = colour; }
