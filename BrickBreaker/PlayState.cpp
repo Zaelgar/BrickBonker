@@ -1,7 +1,7 @@
 // Written by Jaidon van Herwaarden October 2022
 
+#include "Common.h"
 #include "PlayState.hpp"
-
 #include "Game.hpp"
 
 void PlayState::Initialize()
@@ -14,9 +14,25 @@ void PlayState::Initialize()
 	levelSong.setLoop(true);
 	levelSong.play();
 
+	const GameConfig& gameConfig = Game::Get()->GetGameConfig();
+
 	// Initialize Game Objects
 	mPaddle.Initialize();
 	mBall.Initialize();
+
+	// Initialize walls
+	mLeftWall.setFillColor(sf::Color::Blue);
+	mLeftWall.setSize({ static_cast<float>(GameConstants::WallThickness), static_cast<float>(gameConfig.mWindowHeight) });
+	mLeftWall.setPosition({ -(GameConstants::WallThickness / 2.f), 0.f });
+
+	mTopWall.setFillColor(sf::Color::Blue);
+	mTopWall.setSize({ static_cast<float>(gameConfig.mWindowWidth), static_cast<float>(GameConstants::WallThickness) });
+	mTopWall.setPosition({0.f, -(GameConstants::WallThickness / 2.f)});
+
+	mRightWall.setFillColor(sf::Color::Blue);
+	mRightWall.setSize({ static_cast<float>(GameConstants::WallThickness), static_cast<float>(gameConfig.mWindowHeight) });
+	mRightWall.setPosition({ gameConfig.mWindowWidth - (GameConstants::WallThickness / 2.f) }, 0.f);
+
 
 	// Initialize brick layout
 	// TODO1: Convert this to read in a CSV or JSON as a level? Makes Playstate more versatile
@@ -26,30 +42,22 @@ void PlayState::Initialize()
 	mBricks.shrink_to_fit();
 	float brickHeight = GameConstants::BrickHeight;
 	float brickWidth = GameConstants::BrickWidth;
-	float edgeOffset = 40.f;
-	float offset = 22.2f;
+	float edgeOffset = 80.f;
+	float offset = 13.3f;
 	for (int y = 0; y < levelHeight; ++y)
 	{
 		for (int x = 0; x < levelWidth; ++x)
 		{
 			int i = x + y * levelWidth;
 			mBricks[i].SetColour(sf::Color::Red);
-			mBricks[i].SetPosition(edgeOffset + ((brickWidth + offset) * x), edgeOffset + ((brickHeight + offset)*y) );
+			mBricks[i].SetPosition(edgeOffset + ((brickWidth + offset) * x), edgeOffset + ((brickHeight + offset) * y));
+			mBricks[i].SetActive(true);
 		}
 	}
 
 	// Initialize Pause Screen
-	mPlayButton.LoadTexture("resources\\play.png");
-	mPlayButton.SetPosition({ 550.0f, 250.0f });
-	mPlayButton.SetColour(sf::Color::Green);
-
-	mQuitButton.LoadTexture("resources\\quit.png");
-	mQuitButton.SetPosition({ 565.0f, 450.0f });
-	mQuitButton.SetColour(sf::Color::Red);
-
-	mPauseUnderlay.setSize({ static_cast<float>(Game::Get()->GetGameConfig().mWindowWidth)
-		, static_cast<float>(Game::Get()->GetGameConfig().mWindowHeight) });
-	mPauseUnderlay.setFillColor(mPauseColour);
+	mPauseMenu.Initialize();
+	mIsPaused = false;
 }
 
 void PlayState::Terminate()
@@ -61,6 +69,11 @@ void PlayState::Terminate()
 void PlayState::Update(float deltaTime)
 {
 	auto game = Game::Get();
+
+	if (mBall.CheckDeathCollision())
+	{
+		mIsPaused = true;
+	}
 
 	if (Game::Get()->IsEscapeHitThisFrame(true))
 	{
@@ -74,18 +87,9 @@ void PlayState::Update(float deltaTime)
 		mPaddle.Update();
 		mBall.Update();
 	}
-	else
+	else if(mPauseMenu.Update()) // Will return true if resume is pressed
 	{
-		auto mousePosition = sf::Mouse::getPosition(*game->GetRenderWindow());
-		if (mPlayButton.Update(mousePosition))
-		{
-			mIsPaused = false;
-		}
-		else if (mQuitButton.Update(mousePosition))
-		{
-			mIsPaused = false;
-			game->ChangeState("MenuState");
-		}
+		mIsPaused = false;
 	}
 }
 
@@ -93,22 +97,30 @@ void PlayState::Render()
 {
 	auto renderWindow = Game::Get()->GetRenderWindow();
 
+	// Draw Walls
+	renderWindow->draw(mLeftWall);
+	renderWindow->draw(mTopWall);
+	renderWindow->draw(mRightWall);
+
+	// Draw Bricks
 	for (auto& brick : mBricks)
 	{
 		if (brick.IsActive())
 		{
+			// TODO1: Remove this pattern. Let objects know how to render themselves.
+			// GameObject->Render() vs renderWindow.draw(GameObject->GetDrawable());
 			renderWindow->draw(brick.GetDrawable());
 		}
 	}
 
+	// Draw other game objects
 	renderWindow->draw(mPaddle.GetDrawable());
 	renderWindow->draw(mBall.GetDrawable());
 
+	// Only if paused, draw pause screen
 	if (mIsPaused)
 	{
-		renderWindow->draw(mPauseUnderlay);
-		renderWindow->draw(mPlayButton.GetDrawable());
-		renderWindow->draw(mQuitButton.GetDrawable());
+		mPauseMenu.Render();
 	}
 }
 
@@ -130,18 +142,32 @@ void PlayState::CheckCollisions()
 
 			if (collisionType == CollisionType::Left || collisionType == CollisionType::Right)
 			{
-				auto vel = mBall.GetVelocity();
-				vel.x *= -1.f;
-				mBall.SetVelocity(vel);
+				mBall.NegateXVelocity();
 				brick.SetActive(false);
 			}
 			else if (collisionType == CollisionType::Top || collisionType == CollisionType::Bottom)
 			{
-				auto vel = mBall.GetVelocity();
-				vel.y *= -1.f;
-				mBall.SetVelocity(vel);
+				mBall.NegateYVelocity();
 				brick.SetActive(false);
 			}
 		}
+	}
+
+	collisionType = mBall.CheckRectCollision(mLeftWall.getGlobalBounds());
+	if (collisionType != CollisionType::None)
+	{
+		mBall.NegateXVelocity();
+	}
+
+	collisionType = mBall.CheckRectCollision(mRightWall.getGlobalBounds());
+	if (collisionType != CollisionType::None)
+	{
+		mBall.NegateXVelocity();
+	}
+
+	collisionType = mBall.CheckRectCollision(mTopWall.getGlobalBounds());
+	if (collisionType != CollisionType::None)
+	{
+		mBall.NegateYVelocity();
 	}
 }

@@ -5,6 +5,7 @@
 
 void Ball::Initialize()
 {
+	// TODO1: Have a real start position on the paddle. Click to release maybe?
 	mCircleShape.setPosition({ 300.0f, 300.0f });
 
 	auto center = mCircleShape.getLocalBounds();
@@ -14,9 +15,8 @@ void Ball::Initialize()
 void Ball::Update()
 {
 	// On click if stuck, should unstick.
-	// Collision handled by PlayState because it knows of everyone.
+	// Collision initiated by PlayState because it knows of all game objects.
 	mCircleShape.move(mVelocity.x, mVelocity.y);
-	CheckWallCollision();
 }
 
 const JMath::Vector2 Ball::GetPosition() const
@@ -37,50 +37,30 @@ void Ball::SetVelocity(JMath::Vector2 velocity)
 	mVelocity *= mSpeed;
 }
 
-void Ball::CheckWallCollision()
+bool Ball::CheckDeathCollision()
 {
 	auto windowHeight = Game::Get()->GetGameConfig().mWindowHeight;
 	auto windowWidth = Game::Get()->GetGameConfig().mWindowWidth;
 	auto position = mCircleShape.getPosition();
 	auto bounds = mCircleShape.getLocalBounds();
 
-	// Check if our ball has touched or crossed either the left or right side of the screen
-	if (position.x >= (windowWidth - (bounds.width / 2.f))) // Right side
+	// Check if our ball has fully crossed the bottom side of the screen
+	if (position.y >= (windowHeight + GameConstants::BallSize * 2.f)) // Bottom side
 	{
-		mVelocity.x *= -1.f;
-		// position properly from bounce
-		mCircleShape.setPosition(windowWidth - (bounds.width / 2.f), position.y);
+		return true;
 	}
-	else if (position.x <= bounds.width / 2.f) // Left side
-	{
-		mVelocity.x *= -1.f;
-		// position properly from bounce
-		mCircleShape.setPosition(bounds.width / 2.f, position.y);
-	}
-
-	// Check if our ball has touched or crossed either the top or bottom side of the screen
-	// TODO1: bottom kills you
-	if (position.y >= (windowHeight - (bounds.height / 2.f))) // Bottom side
-	{
-		mVelocity.y *= -1.f;
-		// position properly from bounce
-		mCircleShape.setPosition(position.x, (windowHeight - (bounds.height / 2.f)));
-	}
-	else if (position.y <= bounds.height / 2.f) // Top side
-	{
-		mVelocity.y *= -1.f;
-		// position properly from bounce
-		mCircleShape.setPosition(position.x, (bounds.height / 2.f));
-	}
+	return false;
 }
 
 CollisionType Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect)
 {
-	// Get point from center of ball to point on edge closest to rect.
-	// if point intersects with rect, we collide. Good enough approximation?
-	// TODO1 Better found here: https://www.jeffreythompson.org/collision-detection/circle-rect.php
-	// This does not work if the ball is moving fast enough to go through the rect.
+	// TODO1: Speed is a bit too high and sometimes collisions (velocity changes) look wonked.
+	// Maybe start from previous position and nudge until collision happens?
 
+	// TODO2: Ball collision should only crunch one brick per frame.
+	// Otherwise it can continue it's motion while flipping velocity
+	// multiple times a frame and it looks weird
+	// This coupled with the solution above could make it look a lot better.
 	const auto circlePosition = mCircleShape.getPosition();
 
 	CollisionType result = CollisionType::None;
@@ -131,4 +111,14 @@ CollisionType Ball::CheckRectCollision(const sf::FloatRect& globalBoundsRect)
 		return result;
 	}
 	return CollisionType::None;
+}
+
+void Ball::NegateXVelocity()
+{
+	mVelocity.x *= -1.f;
+}
+
+void Ball::NegateYVelocity()
+{
+	mVelocity.y *= -1.f;
 }

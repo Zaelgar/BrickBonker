@@ -8,7 +8,7 @@
 
 void MenuState::Initialize()
 {
-	LOG("Initializing MenuStateS.");
+	LOG("Initializing MenuState.");
 
 	ASSERT(titleSong.openFromFile("resources\\title.wav"), std::exception{ "File not found." });
 	titleSong.setVolume(30.f);
@@ -16,14 +16,14 @@ void MenuState::Initialize()
 	titleSong.play();
 
 	mLogo.LoadTexture("resources\\logo.png");
-	mLogo.SetPosition(180.0f, 100.0f);
+	mLogo.SetPosition(100.0f, true);
 
 	mPlayButton.LoadTexture("resources\\play.png");
-	mPlayButton.SetPosition({ 550.0f, 350.0f });
+	mPlayButton.SetPosition(350.0f, true);
 	mPlayButton.SetColour(sf::Color::Green);
 
 	mQuitButton.LoadTexture("resources\\quit.png");
-	mQuitButton.SetPosition({ 565.0f, 550.0f });
+	mQuitButton.SetPosition(550.0f, true);
 	mQuitButton.SetColour(sf::Color::Red);
 }
 

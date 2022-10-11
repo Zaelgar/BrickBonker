@@ -1,9 +1,8 @@
 // Written by Jaidon van Herwaarden October 2022
 
-#include "GameState.hpp"
+#include "GameCommon.hpp"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include "GameState.hpp"
 
 #include "GameSprite.hpp"
 #include "GameButton.hpp"

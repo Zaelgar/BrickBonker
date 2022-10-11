@@ -2,22 +2,15 @@
 
 #pragma once
 
-// Engine dependencies
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
-// STL
 #include <vector>
 
-// Game
-#include "GameConstants.hpp"
 #include "GameState.hpp"
 
 // Game Objects
 #include "Ball.hpp"
 #include "Brick.hpp"
 #include "Paddle.hpp"
-#include "GameButton.hpp"
+#include "PauseMenu.hpp"
 
 class PlayState : public GameState
 {
@@ -35,16 +28,15 @@ private:
 	void CheckCollisions();
 
 	sf::Music levelSong{};
+	PauseMenu mPauseMenu{};
 
 	// Game Objects
 	Paddle mPaddle{};
 	Ball mBall{};
 	std::vector<Brick> mBricks{};
-
-	GameButton mPlayButton{};
-	GameButton mQuitButton{};
-	sf::RectangleShape mPauseUnderlay{};
-	sf::Color mPauseColour{ 255u, 255u, 255u, 128u };
+	sf::RectangleShape mLeftWall{};
+	sf::RectangleShape mTopWall{};
+	sf::RectangleShape mRightWall{};
 
 	bool mIsPaused = false;
 };
