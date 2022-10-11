@@ -19,6 +19,11 @@ void PlayState::Initialize()
 	// Initialize Game Objects
 	mPaddle.Initialize();
 	mBall.Initialize();
+	
+	mEarth.LoadTexture("resources\\bigearth.png");
+	auto& sprite = mEarth.GetSprite();
+
+	InitializeStars();
 
 	// Initialize walls
 	mLeftWall.setFillColor(sf::Color::Blue);
@@ -49,11 +54,13 @@ void PlayState::Initialize()
 		for (int x = 0; x < levelWidth; ++x)
 		{
 			int i = x + y * levelWidth;
-			mBricks[i].SetColour(sf::Color::Red);
+
+			mBricks[i].Initialize();
 			mBricks[i].SetPosition(edgeOffset + ((brickWidth + offset) * x), edgeOffset + ((brickHeight + offset) * y));
 			mBricks[i].SetActive(true);
 		}
 	}
+	mActiveBrickCounter = levelHeight * levelWidth;
 
 	// Initialize Pause Screen
 	mPauseMenu.Initialize();
@@ -69,6 +76,8 @@ void PlayState::Terminate()
 void PlayState::Update(float deltaTime)
 {
 	auto game = Game::Get();
+
+	UpdateStars();
 
 	if (mBall.CheckDeathCollision())
 	{
@@ -91,11 +100,18 @@ void PlayState::Update(float deltaTime)
 	{
 		mIsPaused = false;
 	}
+
+	if (!mActiveBrickCounter)
+	{
+		game->ChangeState("VictoryState");
+	}
 }
 
 void PlayState::Render()
 {
 	auto renderWindow = Game::Get()->GetRenderWindow();
+
+	RenderStars(renderWindow);
 
 	// Draw Walls
 	renderWindow->draw(mLeftWall);
@@ -114,8 +130,11 @@ void PlayState::Render()
 	// Draw other game objects
 	mPaddle.Render();
 	mBall.Render();
+	auto v = mEarth.GetGlobalBounds();
+	mEarth.Render();
 
-	// Only if paused, draw pause screen
+
+	// Only if paused, draw pause screen last (on top)
 	if (mIsPaused)
 	{
 		mPauseMenu.Render();
@@ -132,10 +151,12 @@ void PlayState::CheckCollisions()
 		mBall.SetVelocity(paddleToBall);
 	}
 
+	mActiveBrickCounter = 0;
 	for (auto& brick : mBricks)
 	{
 		if (brick.IsActive())
 		{
+			++mActiveBrickCounter;
 			collisionType = mBall.CheckRectCollision(brick.GetGlobalBounds());
 
 			if (collisionType == CollisionType::Left || collisionType == CollisionType::Right)
@@ -167,5 +188,52 @@ void PlayState::CheckCollisions()
 	if (collisionType != CollisionType::None)
 	{
 		mBall.NegateYVelocity();
+	}
+}
+
+void PlayState::InitializeStars()
+{
+	auto& gameConfig = Game::Get()->GetGameConfig();
+
+	mStars.resize(starCount);
+	std::vector<JMath::Vector2> positions{};
+	JMath::RandomPointsInRectangle(positions
+		, { 0.f, 0.f, static_cast<float>(gameConfig.mWindowWidth), static_cast<float>(gameConfig.mWindowHeight) }
+		, starCount);
+
+	for (size_t i = 0; i < starCount; ++i)
+	{
+		mStars[i].setFillColor(mStarColour);
+		mStars[i].setSize(mStarSize);
+		//mStars[i].setPosition(positions[i].x, positions[i].y);
+		mStars[i].setPosition(RandomStarPosition());
+	}
+}
+
+void PlayState::UpdateStars()
+{
+	for (auto& s : mStars)
+	{
+		s.move(0.f, -mStarSpeed);
+		auto position = s.getPosition();
+		if (s.getPosition().y < 0)
+		{
+			s.setPosition(s.getPosition().x, Game::Get()->GetGameConfig().mWindowHeight + mStarSize.y);
+		}
+	}
+}
+
+sf::Vector2f PlayState::RandomStarPosition()
+{
+	auto& gameConfig = Game::Get()->GetGameConfig();
+	return { JMath::Random::RandomFloatUniform(0.f, gameConfig.mWindowWidth)
+		, JMath::Random::RandomFloatUniform(0.f, gameConfig.mWindowHeight) };
+}
+
+void PlayState::RenderStars(sf::RenderWindow* renderWindow)
+{
+	for (auto& s : mStars)
+	{
+		renderWindow->draw(s);
 	}
 }

@@ -15,6 +15,9 @@ public:
 	void LoadTexture(std::string filePath);
 	void SetPosition(float x, float y);
 
+	sf::FloatRect GetGlobalBounds() const { return mSprite.getGlobalBounds(); }
+	sf::Sprite& GetSprite() { return mSprite; }
+
 	// Is this weird? I don't know. I like it though
 	void SetPosition(float yOrBoth, bool isXCentered = false);
 

@@ -52,7 +52,7 @@ bool GameButton::IsMouseOverButton(sf::Vector2<int> mousePosition)
 
 bool GameButton::IsButtonPressed()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (Game::Get()->IsMouseReleasedThisFrame(true))
 	{
 		return true;
 	}

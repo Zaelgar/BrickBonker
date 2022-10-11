@@ -1,16 +1,17 @@
 // Written by Jaidon van Herwaarden October 2022
 
-#include "GameCommon.hpp"
+#pragma once
 
 #include "GameState.hpp"
 
+#include "GameCommon.hpp"
 #include "GameSprite.hpp"
 #include "GameButton.hpp"
 
-class MenuState : public GameState
+class VictoryState : public GameState
 {
 public:
-	MenuState() = default;
+	VictoryState() = default;
 
 	void Initialize() override;
 	void Terminate() override;
@@ -19,15 +20,8 @@ public:
 	void Render() override;
 
 private:
-
-	// Music
-	sf::Music titleSong{};
-
-	// Title Banner
-	GameSprite mLogo{};
-	GameSprite mEarth{};
-
-	// Menu Buttone
-	GameButton mPlayButton{};
-	GameButton mQuitButton{};
+	sf::SoundBuffer mVictorySoundBuffer{};
+	sf::Sound mVictoryNoise{};
+	GameSprite mVictorySprite{};
+	GameButton mHeroButton{};
 };

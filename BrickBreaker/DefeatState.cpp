@@ -5,6 +5,7 @@
 
 void DefeatState::Initialize()
 {
+	LOG("Initializing DefeatState.");
 	const auto& gameConfig = Game::Get()->GetGameConfig();
 
 	mDefeatSprite.LoadTexture("resources\\defeat.png");
@@ -22,6 +23,7 @@ void DefeatState::Initialize()
 
 void DefeatState::Terminate()
 {
+	LOG("Terminating DefeatState.");
 	mDefeatNoise.stop();
 }
 

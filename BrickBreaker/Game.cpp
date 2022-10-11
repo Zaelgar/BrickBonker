@@ -8,6 +8,7 @@
 #include "PlayState.hpp"
 #include "MenuState.hpp"
 #include "DefeatState.h"
+#include "VictoryState.h"
 
 namespace
 {
@@ -34,6 +35,7 @@ Game::Game(GameConfig gameConfig)
 	AddState<MenuState>("MenuState");
 	AddState<PlayState>("PlayState");
 	AddState<DefeatState>("DefeatState");
+	AddState<VictoryState>("VictoryState");
 
 	mCurrentState = mGameStates["MenuState"].get();
 }
@@ -80,6 +82,7 @@ void Game::Run()
 	while (mRenderWindow->isOpen())
 	{
 		mIsEscapeHitThisFrame = false;
+		mIsMouseReleasedThisFrame = false;
 		sf::Event event;
 		while (mRenderWindow->pollEvent(event))
 		{
@@ -91,6 +94,10 @@ void Game::Run()
 			else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Key::Escape)
 			{
 				mIsEscapeHitThisFrame = true;
+			}
+			else if (event.type == sf::Event::MouseButtonReleased)
+			{
+				mIsMouseReleasedThisFrame = true;
 			}
 		}
 
@@ -123,6 +130,16 @@ bool Game::IsEscapeHitThisFrame(bool isConsumed)
 	if (mIsEscapeHitThisFrame && isConsumed)
 	{
 		mIsEscapeHitThisFrame = false;
+		return true;
+	}
+	return mIsEscapeHitThisFrame;
+}
+
+bool Game::IsMouseReleasedThisFrame(bool isConsumed)
+{
+	if (mIsMouseReleasedThisFrame && isConsumed)
+	{
+		mIsMouseReleasedThisFrame = false;
 		return true;
 	}
 	return mIsEscapeHitThisFrame;

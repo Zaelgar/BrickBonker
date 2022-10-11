@@ -3,8 +3,9 @@
 #pragma once
 
 #include "GameCommon.hpp"
+#include "GameSprite.hpp"
 
-class Brick
+class Alien
 {
 public:
 	void Initialize();
@@ -12,19 +13,21 @@ public:
 	void Render();
 	void Shutdown();
 
-	const sf::RectangleShape GetRectangleShape() const { return mRectangleShape; }
-	const sf::FloatRect GetGlobalBounds() const { return mRectangleShape.getGlobalBounds(); }
+	//const sf::RectangleShape GetRectangleShape() const { return mRectangleShape; }
+	const sf::FloatRect GetGlobalBounds() const { return mSprite.GetGlobalBounds(); }
 
-	void SetColour(sf::Color colour);
+	//void SetColour(sf::Color colour);
 	void SetPosition(float x, float y);
 	void SetActive(bool isActive) { mIsActive = isActive; }
 
 	bool IsActive() { return mIsActive; }
 private:
-	sf::RectangleShape mRectangleShape{{
-		GameConstants::BrickWidth,
-		GameConstants::BrickHeight
-	}};
+	//sf::RectangleShape mRectangleShape{{
+	//	GameConstants::BrickWidth,
+	//	GameConstants::BrickHeight
+	//}};
+
+	GameSprite mSprite{};
 
 	bool mIsActive = true;
 };
