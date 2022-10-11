@@ -19,6 +19,8 @@ void DefeatState::Initialize()
 	ASSERT(mDefeatSoundBuffer.loadFromFile("resources\\defeat.wav"), std::exception("File not found."));
 	mDefeatNoise.setBuffer(mDefeatSoundBuffer);
 	mDefeatNoise.play();
+
+	Game::Get()->GetRenderWindow()->setMouseCursorVisible(true);
 }
 
 void DefeatState::Terminate()

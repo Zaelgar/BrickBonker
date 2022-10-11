@@ -20,6 +20,8 @@ void VictoryState::Initialize()
 	ASSERT(mVictorySoundBuffer.loadFromFile("resources\\victory.wav"), std::exception("File not found."));
 	mVictoryNoise.setBuffer(mVictorySoundBuffer);
 	mVictoryNoise.play();
+
+	Game::Get()->GetRenderWindow()->setMouseCursorVisible(true);
 }
 
 void VictoryState::Terminate()
